@@ -1,10 +1,13 @@
 "use client";
 
-import { useEffect } from "react";
-import { useReval } from "./use-financialmodel";
+import { useEffect, useState } from "react";
+import { USMFDevelopmentReval } from "@/financialmodel/models/reval/USMFDevelopmentReval";
 
-export default function USMFDevelopmentReval() {
-  const { revalAssumptionData, revalModelData, setRevalAssumptionData, setRevalModelData } = useReval();
+export default function USMFDevelopmentRevalPage({data}: {data: USMFDevelopmentReval}) {
+
+  const [revalModelData, setRevalModelData] = useState<USMFDevelopmentReval>(data);
+
+  
 
   useEffect(() => {
     // Initialize model data when component mounts

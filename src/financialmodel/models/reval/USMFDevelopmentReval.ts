@@ -1,10 +1,10 @@
-import { USMFDevelopmentRevalInputType } from "../../../types/assumptions/USDevelopmentAssumptions";
-import { ActualData } from "../../../types/reval/ActualData";
-import { IReval } from "../IReval";
-import { Asset } from "../../Asset";
-import { Node } from "../../Node";
-import { UnderwritingModel } from "../../UnderwritingModel";
-import { USMFDevelopmentModelConfig, USMFDevelopmentResultConfig } from "../../../config/development/USMFConfig";
+import { USMFDevelopmentRevalInputType } from "../../types/assumptions/USDevelopmentAssumptions";
+import { ActualData } from "../../types/reval/ActualData";
+import { IReval } from "./IReval";
+import { Asset } from "../Asset";
+import { Node } from "../Node";
+import { UnderwritingModel } from "../UnderwritingModel";
+import { USMFDevelopmentModelConfig, USMFDevelopmentResultConfig } from "../../config/development/USMFConfig";
 
 export class USMFDevelopmentReval implements IReval {
   // Satisfy the IReval interface
@@ -73,6 +73,8 @@ export class USMFDevelopmentReval implements IReval {
     }
   }
 
+  // implementing the IReval interface
+
   getUnleveredCashflowNode(): Node | null {
     return this.underwritingModel.getNodeByName("Unlevered Cashflow");
   }
@@ -90,5 +92,22 @@ export class USMFDevelopmentReval implements IReval {
   getLeveredCashflowNode(): Node | null {
     return this.underwritingModel.getNodeByName("Levered Cashflow");
   }
-  // ... similarly for getUnleveredCashflowNode, getNOINode, etc.
+
+  // Supporting functions to recalc the deal
+
+  calculateUnleveredProjectCost(): Node | null {
+    return null;
+  }
+
+  calculateNOI(): Node | null {
+    return null;
+  }
+
+  calculateExitSale(): Node[] | null {
+    return null;
+  }
+
+  calculateFinancing(): Node[] | null {
+    return null;
+  }
 }
