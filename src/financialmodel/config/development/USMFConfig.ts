@@ -1,7 +1,7 @@
 import { ModelConfig } from "../../types/config/ModelConfig";
 
 export const USMFDevelopmentModelConfig: ModelConfig = {
-  name: "Gorss Levered Cashflow",
+  name: "Gross Levered Cashflow",
   children: [
     {
       name: "Unlevered Cashflow",
