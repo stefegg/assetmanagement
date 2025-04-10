@@ -1,5 +1,66 @@
 import { createContext, useContext, ReactNode, useState } from 'react'
 
+export interface LoanSpreadChanges {
+  notifyDate: string;
+  termMths: number;
+  startDate: string;
+  endDate: string;
+  extensionFee: number;
+  rateSpread: number;
+  rateAdjustment: number;
+  changeExtensionFee: number;
+  utilized: "Y" | "N";
+  adjRepaymentDate: string;
+}
+
+export interface InterestHedging {
+  hedgeRate: number;
+  startDate: string;
+  endDate: string;
+  floorRate: number;
+  ceilingRate: number;
+  swapFixed: number;
+}
+
+export interface DSCRTest {
+  revenuePeriod: string;
+  expensePeriod: string;
+  requiredCoverage: number;
+  requiredDebtYield: number;
+  requiredLTV: number;
+  amortizationYears: number;
+  minimumInterestRate: number;
+  forwardCurve: string;
+  spread: number;
+  testStartDate: string;
+  testEndDate: string;
+  passFail: string;
+}
+
+export interface Loan {
+  lender: string;
+  loanStartDate: string;
+  monthsNote: number;
+  reference: string;
+  spreadOverReference: number;
+  referenceHedgeBps: number;
+  loanBalance: number;
+  totalLoanCommitment: number;
+  originationFee: number;
+  prePaymentPenaltyPercent: number;
+  prePaymentPenaltyAmount: number;
+  fixedMonthlyAmort: "Y" | "N";
+  monthlyAmortAmount: number;
+  amortizingPrincipal: "Y" | "N";
+  amortizationStartDate: string;
+  amortizationTermMonths: number;
+  amortizationRate: number;
+  spreadChanges: LoanSpreadChanges[];
+  interestHedging: InterestHedging;
+  dscrTests: DSCRTest[];
+  loanDebtServiceCoverageThrough: string;
+}
+
 interface WizardContextType {
   propertyName: string;
   address: string;
@@ -48,6 +109,78 @@ interface WizardContextType {
   investmentPhaseEndDate: string;
   commercialDevPhaseEnd: string;
   commercialInvPhaseEnd: string;
+  partnershipAbstract: string;
+  preferredReturnCompoundPeriod: string;
+  tier1Type: string;
+  tier1FundingCap: number;
+  tier2Type: string;
+  tier2FundingCap: number;
+  tier3Type: string;
+  tier3FundingCap: number;
+  tier4Type: string;
+  tier4FundingCap: number;
+  tier5Type: string;
+  tier5FundingCap: number;
+  tier6Type: string;
+  tier6FundingCap: number;
+  tier7Type: string;
+  tier7FundingCap: number;
+  tier8Type: string;
+  tier8FundingCap: number;
+  tier9Type: string;
+  tier9FundingCap: number;
+  tier10Type: string;
+  tier10FundingCap: number;
+  totalProjectCost: number;
+  totalEquity: number;
+  totalDebt: number;
+  totalCoinvest: number;
+  loans: Loan[];
+  stabilizedOccupancy: number;
+  propertyMinCash: number;
+  propertyMaxCash: number;
+  propertyMgmtFeePercent: number;
+  propertyMgmtFeeMin: number;
+  assetMgmtFeePercent: number;
+  assetMgmtFeeMin: number;
+  assetMgmtFeeStart: string;
+  marketRentGrowth: number[];
+  gainLossToLeaseGrowth: number[];
+  downUnitLossGrowth: number[];
+  miscOtherRentsGrowth: number[];
+  recurringConcessionsGrowth: number[];
+  concessionsGrowth: number[];
+  vacancyLossGrowth: number[];
+  nonRevenueUnitsGrowth: number[];
+  badDebtGrowth: number[];
+  badDebtRecoveryGrowth: number[];
+  miscDirectIncomeGrowth: number[];
+  otherIncResidentialGrowth: number[];
+  expenseShoppingCommercialGrowth: number[];
+  rentalOtherIncomeGrowth: number[];
+  miscIncomeGrowth: number[];
+  payrollBenefitsGrowth: number[];
+  repairsMaintenanceGrowth: number[];
+  outsideServicesGrowth: number[];
+  makeReadyGrowth: number[];
+  recreationalAmenitiesGrowth: number[];
+  contractServicesGrowth: number[];
+  corporateHousingGrowth: number[];
+  guestSuiteGrowth: number[];
+  foodServiceGrowth: number[];
+  advertisingMarketingGrowth: number[];
+  officeExpensesGrowth: number[];
+  otherGeneralAdminGrowth: number[];
+  generalAdminGrowth: number[];
+  utilitiesGrowth: number[];
+  propertyGrowth: number[];
+  recoverableOpExpGrowth: number[];
+  routineReplacementGrowth: number[];
+  capitalRenovationGrowth: number[];
+  otherNonOpExpGrowth: number[];
+  otherExpensesGrowth: number[];
+  partnershipOwnerGrowth: number[];
+  debtServiceGroundLeaseGrowth: number[];
   setPropertyName: (value: string) => void;
   setAddress: (value: string) => void;
   setCity: (value: string) => void;
@@ -94,6 +227,78 @@ interface WizardContextType {
   setInvestmentPhaseEndDate: (value: string) => void;
   setCommercialDevPhaseEnd: (value: string) => void;
   setCommercialInvPhaseEnd: (value: string) => void;
+  setPartnershipAbstract: (value: string) => void;
+  setPreferredReturnCompoundPeriod: (value: string) => void;
+  setTier1Type: (value: string) => void;
+  setTier1FundingCap: (value: number) => void;
+  setTier2Type: (value: string) => void;
+  setTier2FundingCap: (value: number) => void;
+  setTier3Type: (value: string) => void;
+  setTier3FundingCap: (value: number) => void;
+  setTier4Type: (value: string) => void;
+  setTier4FundingCap: (value: number) => void;
+  setTier5Type: (value: string) => void;
+  setTier5FundingCap: (value: number) => void;
+  setTier6Type: (value: string) => void;
+  setTier6FundingCap: (value: number) => void;
+  setTier7Type: (value: string) => void;
+  setTier7FundingCap: (value: number) => void;
+  setTier8Type: (value: string) => void;
+  setTier8FundingCap: (value: number) => void;
+  setTier9Type: (value: string) => void;
+  setTier9FundingCap: (value: number) => void;
+  setTier10Type: (value: string) => void;
+  setTier10FundingCap: (value: number) => void;
+  setTotalProjectCost: (value: number) => void;
+  setTotalEquity: (value: number) => void;
+  setTotalDebt: (value: number) => void;
+  setTotalCoinvest: (value: number) => void;
+  setLoans: (loans: Loan[]) => void;
+  setStabilizedOccupancy: (value: number) => void;
+  setPropertyMinCash: (value: number) => void;
+  setPropertyMaxCash: (value: number) => void;
+  setPropertyMgmtFeePercent: (value: number) => void;
+  setPropertyMgmtFeeMin: (value: number) => void;
+  setAssetMgmtFeePercent: (value: number) => void;
+  setAssetMgmtFeeMin: (value: number) => void;
+  setAssetMgmtFeeStart: (value: string) => void;
+  setMarketRentGrowth: (value: number[]) => void;
+  setGainLossToLeaseGrowth: (value: number[]) => void;
+  setDownUnitLossGrowth: (value: number[]) => void;
+  setMiscOtherRentsGrowth: (value: number[]) => void;
+  setRecurringConcessionsGrowth: (value: number[]) => void;
+  setConcessionsGrowth: (value: number[]) => void;
+  setVacancyLossGrowth: (value: number[]) => void;
+  setNonRevenueUnitsGrowth: (value: number[]) => void;
+  setBadDebtGrowth: (value: number[]) => void;
+  setBadDebtRecoveryGrowth: (value: number[]) => void;
+  setMiscDirectIncomeGrowth: (value: number[]) => void;
+  setOtherIncResidentialGrowth: (value: number[]) => void;
+  setExpenseShoppingCommercialGrowth: (value: number[]) => void;
+  setRentalOtherIncomeGrowth: (value: number[]) => void;
+  setMiscIncomeGrowth: (value: number[]) => void;
+  setPayrollBenefitsGrowth: (value: number[]) => void;
+  setRepairsMaintenanceGrowth: (value: number[]) => void;
+  setOutsideServicesGrowth: (value: number[]) => void;
+  setMakeReadyGrowth: (value: number[]) => void;
+  setRecreationalAmenitiesGrowth: (value: number[]) => void;
+  setContractServicesGrowth: (value: number[]) => void;
+  setCorporateHousingGrowth: (value: number[]) => void;
+  setGuestSuiteGrowth: (value: number[]) => void;
+  setFoodServiceGrowth: (value: number[]) => void;
+  setAdvertisingMarketingGrowth: (value: number[]) => void;
+  setOfficeExpensesGrowth: (value: number[]) => void;
+  setOtherGeneralAdminGrowth: (value: number[]) => void;
+  setGeneralAdminGrowth: (value: number[]) => void;
+  setUtilitiesGrowth: (value: number[]) => void;
+  setPropertyGrowth: (value: number[]) => void;
+  setRecoverableOpExpGrowth: (value: number[]) => void;
+  setRoutineReplacementGrowth: (value: number[]) => void;
+  setCapitalRenovationGrowth: (value: number[]) => void;
+  setOtherNonOpExpGrowth: (value: number[]) => void;
+  setOtherExpensesGrowth: (value: number[]) => void;
+  setPartnershipOwnerGrowth: (value: number[]) => void;
+  setDebtServiceGroundLeaseGrowth: (value: number[]) => void;
 }
 
 const WizardContext = createContext<WizardContextType | undefined>(undefined);
@@ -147,6 +352,87 @@ export function WizardProvider({ children }: { children: ReactNode }) {
   const [commercialDevPhaseEnd, setCommercialDevPhaseEnd] = useState('');
   const [commercialInvPhaseEnd, setCommercialInvPhaseEnd] = useState('');
 
+  // Partnership Structure states
+  const [partnershipAbstract, setPartnershipAbstract] = useState('');
+  const [preferredReturnCompoundPeriod, setPreferredReturnCompoundPeriod] = useState('Annually');
+  // Funding Percentages states
+  const [tier1Type, setTier1Type] = useState('Priority Capital');
+  const [tier1FundingCap, setTier1FundingCap] = useState(0);
+  const [tier2Type, setTier2Type] = useState('Initial Cost Overruns');
+  const [tier2FundingCap, setTier2FundingCap] = useState(0);
+  const [tier3Type, setTier3Type] = useState('Cost Overruns');
+  const [tier3FundingCap, setTier3FundingCap] = useState(0);
+  const [tier4Type, setTier4Type] = useState('Additional Capital');
+  const [tier4FundingCap, setTier4FundingCap] = useState(0);
+  const [tier5Type, setTier5Type] = useState('Cost Overruns 2');
+  const [tier5FundingCap, setTier5FundingCap] = useState(0);
+  const [tier6Type, setTier6Type] = useState('');
+  const [tier6FundingCap, setTier6FundingCap] = useState(0);
+  const [tier7Type, setTier7Type] = useState('');
+  const [tier7FundingCap, setTier7FundingCap] = useState(0);
+  const [tier8Type, setTier8Type] = useState('');
+  const [tier8FundingCap, setTier8FundingCap] = useState(0);
+  const [tier9Type, setTier9Type] = useState('');
+  const [tier9FundingCap, setTier9FundingCap] = useState(0);
+  const [tier10Type, setTier10Type] = useState('');
+  const [tier10FundingCap, setTier10FundingCap] = useState(0);
+  // Project Capitalization states
+  const [totalProjectCost, setTotalProjectCost] = useState(0);
+  const [totalEquity, setTotalEquity] = useState(0);
+  const [totalDebt, setTotalDebt] = useState(0);
+  const [totalCoinvest, setTotalCoinvest] = useState(0);
+
+  // Income & Expenses states
+  const [stabilizedOccupancy, setStabilizedOccupancy] = useState(95.00);
+  const [propertyMinCash, setPropertyMinCash] = useState(500000);
+  const [propertyMaxCash, setPropertyMaxCash] = useState(1700000);
+  const [propertyMgmtFeePercent, setPropertyMgmtFeePercent] = useState(3.00);
+  const [propertyMgmtFeeMin, setPropertyMgmtFeeMin] = useState(10000);
+  const [assetMgmtFeePercent, setAssetMgmtFeePercent] = useState(3.00);
+  const [assetMgmtFeeMin, setAssetMgmtFeeMin] = useState(10000);
+  const [assetMgmtFeeStart, setAssetMgmtFeeStart] = useState('2026-07-31');
+
+  // P&L Growth states
+  const [marketRentGrowth, setMarketRentGrowth] = useState<number[]>(Array(18).fill(3.00));
+  const [gainLossToLeaseGrowth, setGainLossToLeaseGrowth] = useState<number[]>(Array(18).fill(1.00));
+  const [downUnitLossGrowth, setDownUnitLossGrowth] = useState<number[]>(Array(18).fill(0.00));
+  const [miscOtherRentsGrowth, setMiscOtherRentsGrowth] = useState<number[]>(Array(18).fill(0.15));
+  const [recurringConcessionsGrowth, setRecurringConcessionsGrowth] = useState<number[]>(Array(18).fill(0.00));
+  const [concessionsGrowth, setConcessionsGrowth] = useState<number[]>(Array(18).fill(3.00));
+  const [vacancyLossGrowth, setVacancyLossGrowth] = useState<number[]>(Array(18).fill(3.00));
+  const [nonRevenueUnitsGrowth, setNonRevenueUnitsGrowth] = useState<number[]>(Array(18).fill(0.25));
+  const [badDebtGrowth, setBadDebtGrowth] = useState<number[]>(Array(18).fill(0.50));
+  const [badDebtRecoveryGrowth, setBadDebtRecoveryGrowth] = useState<number[]>(Array(18).fill(0.00));
+  const [miscDirectIncomeGrowth, setMiscDirectIncomeGrowth] = useState<number[]>(Array(18).fill(3.00));
+  const [otherIncResidentialGrowth, setOtherIncResidentialGrowth] = useState<number[]>(Array(18).fill(3.00));
+  const [expenseShoppingCommercialGrowth, setExpenseShoppingCommercialGrowth] = useState<number[]>(Array(18).fill(3.00));
+  const [rentalOtherIncomeGrowth, setRentalOtherIncomeGrowth] = useState<number[]>(Array(18).fill(3.00));
+  const [miscIncomeGrowth, setMiscIncomeGrowth] = useState<number[]>(Array(18).fill(3.00));
+  const [payrollBenefitsGrowth, setPayrollBenefitsGrowth] = useState<number[]>(Array(18).fill(2.00));
+  const [repairsMaintenanceGrowth, setRepairsMaintenanceGrowth] = useState<number[]>(Array(18).fill(2.00));
+  const [outsideServicesGrowth, setOutsideServicesGrowth] = useState<number[]>(Array(18).fill(2.00));
+  const [makeReadyGrowth, setMakeReadyGrowth] = useState<number[]>(Array(18).fill(2.00));
+  const [recreationalAmenitiesGrowth, setRecreationalAmenitiesGrowth] = useState<number[]>(Array(18).fill(2.00));
+  const [contractServicesGrowth, setContractServicesGrowth] = useState<number[]>(Array(18).fill(2.00));
+  const [corporateHousingGrowth, setCorporateHousingGrowth] = useState<number[]>(Array(18).fill(2.00));
+  const [guestSuiteGrowth, setGuestSuiteGrowth] = useState<number[]>(Array(18).fill(2.00));
+  const [foodServiceGrowth, setFoodServiceGrowth] = useState<number[]>(Array(18).fill(2.00));
+  const [advertisingMarketingGrowth, setAdvertisingMarketingGrowth] = useState<number[]>(Array(18).fill(2.00));
+  const [officeExpensesGrowth, setOfficeExpensesGrowth] = useState<number[]>(Array(18).fill(2.00));
+  const [otherGeneralAdminGrowth, setOtherGeneralAdminGrowth] = useState<number[]>(Array(18).fill(2.00));
+  const [generalAdminGrowth, setGeneralAdminGrowth] = useState<number[]>(Array(18).fill(2.00));
+  const [utilitiesGrowth, setUtilitiesGrowth] = useState<number[]>(Array(18).fill(2.00));
+  const [propertyGrowth, setPropertyGrowth] = useState<number[]>(Array(18).fill(2.00));
+  const [recoverableOpExpGrowth, setRecoverableOpExpGrowth] = useState<number[]>(Array(18).fill(2.00));
+  const [routineReplacementGrowth, setRoutineReplacementGrowth] = useState<number[]>(Array(18).fill(2.00));
+  const [capitalRenovationGrowth, setCapitalRenovationGrowth] = useState<number[]>(Array(18).fill(2.00));
+  const [otherNonOpExpGrowth, setOtherNonOpExpGrowth] = useState<number[]>(Array(18).fill(2.00));
+  const [otherExpensesGrowth, setOtherExpensesGrowth] = useState<number[]>(Array(18).fill(2.00));
+  const [partnershipOwnerGrowth, setPartnershipOwnerGrowth] = useState<number[]>(Array(18).fill(2.00));
+  const [debtServiceGroundLeaseGrowth, setDebtServiceGroundLeaseGrowth] = useState<number[]>(Array(18).fill(2.00));
+
+  const [loans, setLoans] = useState<Loan[]>([]);
+
   return (
     <WizardContext.Provider
       value={{
@@ -196,6 +482,78 @@ export function WizardProvider({ children }: { children: ReactNode }) {
         investmentPhaseEndDate,
         commercialDevPhaseEnd,
         commercialInvPhaseEnd,
+        partnershipAbstract,
+        preferredReturnCompoundPeriod,
+        tier1Type,
+        tier1FundingCap,
+        tier2Type,
+        tier2FundingCap,
+        tier3Type,
+        tier3FundingCap,
+        tier4Type,
+        tier4FundingCap,
+        tier5Type,
+        tier5FundingCap,
+        tier6Type,
+        tier6FundingCap,
+        tier7Type,
+        tier7FundingCap,
+        tier8Type,
+        tier8FundingCap,
+        tier9Type,
+        tier9FundingCap,
+        tier10Type,
+        tier10FundingCap,
+        totalProjectCost,
+        totalEquity,
+        totalDebt,
+        totalCoinvest,
+        loans,
+        stabilizedOccupancy,
+        propertyMinCash,
+        propertyMaxCash,
+        propertyMgmtFeePercent,
+        propertyMgmtFeeMin,
+        assetMgmtFeePercent,
+        assetMgmtFeeMin,
+        assetMgmtFeeStart,
+        marketRentGrowth,
+        gainLossToLeaseGrowth,
+        downUnitLossGrowth,
+        miscOtherRentsGrowth,
+        recurringConcessionsGrowth,
+        concessionsGrowth,
+        vacancyLossGrowth,
+        nonRevenueUnitsGrowth,
+        badDebtGrowth,
+        badDebtRecoveryGrowth,
+        miscDirectIncomeGrowth,
+        otherIncResidentialGrowth,
+        expenseShoppingCommercialGrowth,
+        rentalOtherIncomeGrowth,
+        miscIncomeGrowth,
+        payrollBenefitsGrowth,
+        repairsMaintenanceGrowth,
+        outsideServicesGrowth,
+        makeReadyGrowth,
+        recreationalAmenitiesGrowth,
+        contractServicesGrowth,
+        corporateHousingGrowth,
+        guestSuiteGrowth,
+        foodServiceGrowth,
+        advertisingMarketingGrowth,
+        officeExpensesGrowth,
+        otherGeneralAdminGrowth,
+        generalAdminGrowth,
+        utilitiesGrowth,
+        propertyGrowth,
+        recoverableOpExpGrowth,
+        routineReplacementGrowth,
+        capitalRenovationGrowth,
+        otherNonOpExpGrowth,
+        otherExpensesGrowth,
+        partnershipOwnerGrowth,
+        debtServiceGroundLeaseGrowth,
         setPropertyName,
         setAddress,
         setCity,
@@ -242,6 +600,78 @@ export function WizardProvider({ children }: { children: ReactNode }) {
         setInvestmentPhaseEndDate,
         setCommercialDevPhaseEnd,
         setCommercialInvPhaseEnd,
+        setPartnershipAbstract,
+        setPreferredReturnCompoundPeriod,
+        setTier1Type,
+        setTier1FundingCap,
+        setTier2Type,
+        setTier2FundingCap,
+        setTier3Type,
+        setTier3FundingCap,
+        setTier4Type,
+        setTier4FundingCap,
+        setTier5Type,
+        setTier5FundingCap,
+        setTier6Type,
+        setTier6FundingCap,
+        setTier7Type,
+        setTier7FundingCap,
+        setTier8Type,
+        setTier8FundingCap,
+        setTier9Type,
+        setTier9FundingCap,
+        setTier10Type,
+        setTier10FundingCap,
+        setTotalProjectCost,
+        setTotalEquity,
+        setTotalDebt,
+        setTotalCoinvest,
+        setLoans,
+        setStabilizedOccupancy,
+        setPropertyMinCash,
+        setPropertyMaxCash,
+        setPropertyMgmtFeePercent,
+        setPropertyMgmtFeeMin,
+        setAssetMgmtFeePercent,
+        setAssetMgmtFeeMin,
+        setAssetMgmtFeeStart,
+        setMarketRentGrowth,
+        setGainLossToLeaseGrowth,
+        setDownUnitLossGrowth,
+        setMiscOtherRentsGrowth,
+        setRecurringConcessionsGrowth,
+        setConcessionsGrowth,
+        setVacancyLossGrowth,
+        setNonRevenueUnitsGrowth,
+        setBadDebtGrowth,
+        setBadDebtRecoveryGrowth,
+        setMiscDirectIncomeGrowth,
+        setOtherIncResidentialGrowth,
+        setExpenseShoppingCommercialGrowth,
+        setRentalOtherIncomeGrowth,
+        setMiscIncomeGrowth,
+        setPayrollBenefitsGrowth,
+        setRepairsMaintenanceGrowth,
+        setOutsideServicesGrowth,
+        setMakeReadyGrowth,
+        setRecreationalAmenitiesGrowth,
+        setContractServicesGrowth,
+        setCorporateHousingGrowth,
+        setGuestSuiteGrowth,
+        setFoodServiceGrowth,
+        setAdvertisingMarketingGrowth,
+        setOfficeExpensesGrowth,
+        setOtherGeneralAdminGrowth,
+        setGeneralAdminGrowth,
+        setUtilitiesGrowth,
+        setPropertyGrowth,
+        setRecoverableOpExpGrowth,
+        setRoutineReplacementGrowth,
+        setCapitalRenovationGrowth,
+        setOtherNonOpExpGrowth,
+        setOtherExpensesGrowth,
+        setPartnershipOwnerGrowth,
+        setDebtServiceGroundLeaseGrowth,
       }}
     >
       {children}
