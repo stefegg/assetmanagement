@@ -11,6 +11,7 @@ import { Insurance } from '@/components/Insurance'
 import { GroundLease } from '@/components/GroundLease'
 import { CommercialAssumptions } from '@/components/CommercialAssumptions'
 import { CapRate } from '@/components/CapRate'
+import { ValuationAssessment } from '@/components/ValuationAssessment'
 
 export default function WizardPage() {
   return (
@@ -27,6 +28,7 @@ export default function WizardPage() {
         <GroundLease />
         <CommercialAssumptions />
         <CapRate />
+        <ValuationAssessment />
       </main>
     </WizardProvider>
   )

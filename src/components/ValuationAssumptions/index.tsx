@@ -1,211 +1,177 @@
 'use client'
 
-import * as React from "react"
-import { Card } from "@/components/ui/card"
-import { Input } from "@/components/ui/input"
-import { useWizard } from "@/context/WizardContext"
+import React, { useEffect, ChangeEvent } from 'react';
+import { Card } from '@/components/ui/card';
+import { Input } from '@/components/ui/input';
+import { useWizard } from '@/context/WizardContext';
 
-const YEARS = Array.from({ length: 11 }, (_, i) => 2025 + i)
+const YEARS = Array.from({ length: 11 }, (_, i) => 2025 + i);
 
-export function CapRate() {
-  const {
-    capRates,
-    capRateAdjustmentGroundLease,
-    setCapRates,
-    setCapRateAdjustmentGroundLease
-  } = useWizard()
+export const ValuationAssumptions = () => {
+  const { capRates, setCapRates, capRateAdjustmentGroundLease, setCapRateAdjustmentGroundLease } = useWizard();
 
-  // Initialize residential cap rates if empty
-  React.useEffect(() => {
-    if (capRates.residential.length === 0) {
+  useEffect(() => {
+    if (!capRates?.residential?.length) {
+      const initialResidential = YEARS.map(year => ({
+        month: 1,
+        year,
+        baseRate: year === 2025 ? 4.50 : 0,
+        hedgePercent: 0,
+        hedgeBps: 0,
+        totalHedge: 0,
+        appliedCapRate: 0
+      }));
+
       setCapRates({
-        ...capRates,
-        residential: YEARS.map(year => ({
-          month: 2,
-          year,
-          baseRate: year === 2025 ? 4.50 : year === 2026 ? 4.65 : year === 2027 ? 4.75 : year === 2028 ? 4.90 : 
-                   year === 2029 ? 5.00 : year === 2030 ? 5.15 : year === 2031 ? 5.20 : year === 2032 ? 5.20 :
-                   year === 2033 ? 5.25 : year === 2034 ? 5.25 : year === 2035 ? 5.30 : 0,
-          hedgePercent: 0,
-          hedgeBps: 0,
-          totalHedge: 0,
-          appliedCapRate: year === 2025 ? 4.50 : year === 2026 ? 4.65 : year === 2027 ? 4.75 : year === 2028 ? 4.90 : 
-                        year === 2029 ? 5.00 : year === 2030 ? 5.15 : year === 2031 ? 5.20 : year === 2032 ? 5.20 :
-                        year === 2033 ? 5.25 : year === 2034 ? 5.25 : year === 2035 ? 5.30 : 0
-        }))
-      })
+        residential: initialResidential,
+        commercial: {
+          spotCapRateDate: '',
+          spotCapRate: 0
+        }
+      });
     }
-  }, [capRates, setCapRates])
+  }, []);
 
-  const updateResidentialCapRate = (index: number, field: string, value: number) => {
-    const newRates = { ...capRates }
-    newRates.residential[index] = {
-      ...newRates.residential[index],
-      [field]: value,
-      // Calculate applied cap rate
-      appliedCapRate: field === 'baseRate' ? value : newRates.residential[index].baseRate
-    }
-    setCapRates(newRates)
-  }
+  const updateResidentialCapRate = (index: number, field: 'baseRate' | 'hedgeBps', value: string | number) => {
+    if (!capRates?.residential) return;
 
-  const updateCommercialCapRate = (field: string, value: string | number) => {
+    const newResidential = [...capRates.residential];
+    newResidential[index] = {
+      ...newResidential[index],
+      [field]: Number(value),
+      totalHedge: field === 'hedgeBps' ? Number(value) : newResidential[index].hedgeBps,
+      appliedCapRate: field === 'baseRate' ? Number(value) + (newResidential[index].hedgeBps / 100) : newResidential[index].baseRate + (Number(value) / 100)
+    };
+
+    setCapRates({
+      ...capRates,
+      residential: newResidential
+    });
+  };
+
+  const updateCommercialCapRate = (field: 'spotCapRateDate' | 'spotCapRate', value: string | number) => {
+    if (!capRates?.commercial) return;
+
     setCapRates({
       ...capRates,
       commercial: {
         ...capRates.commercial,
         [field]: value
       }
-    })
-  }
+    });
+  };
 
   return (
     <Card className="p-6">
-      <h2 className="text-xl font-semibold mb-6">Cap Rates</h2>
-      
-      <div className="space-y-8">
-        {/* Cap Rates */}
-        <div>
-          <h3 className="text-lg font-semibold mb-4 bg-gray-200 p-2">Cap Rates</h3>
-          
-          {/* Residential */}
-          <div className="mb-6">
-            <h4 className="font-semibold mb-2">Residential</h4>
-            <div className="overflow-x-auto">
-              <table className="w-full border-collapse">
-                <tbody>
-                  <tr>
-                    <td className="px-4 py-2 font-semibold">Month</td>
-                    {capRates.residential.map((rate, index) => (
-                      <td key={index} className="px-4 py-2 text-center">{rate.month}</td>
-                    ))}
-                  </tr>
-                  <tr>
-                    <td className="px-4 py-2 font-semibold">Year</td>
-                    {capRates.residential.map((rate, index) => (
-                      <td key={index} className="px-4 py-2 text-center">{rate.year}</td>
-                    ))}
-                  </tr>
-                  <tr>
-                    <td className="px-4 py-2 font-semibold">San Diego</td>
-                    {capRates.residential.map((rate, index) => (
-                      <td key={index} className="px-4 py-2 text-right">{rate.baseRate}%</td>
-                    ))}
-                  </tr>
-                  <tr>
-                    <td className="px-4 py-2 font-semibold">Hedge (%)</td>
-                    {capRates.residential.map((rate, index) => (
-                      <td key={index} className="px-2 py-1 border bg-blue-50">
-                        <Input
-                          type="number"
-                          step="0.01"
-                          className="w-full text-right"
-                          value={rate.hedgePercent || ''}
-                          onChange={(e) => updateResidentialCapRate(index, 'hedgePercent', Number(e.target.value) || 0)}
-                        />
-                      </td>
-                    ))}
-                  </tr>
-                  <tr>
-                    <td className="px-4 py-2 font-semibold">Hedge (bps)</td>
-                    {capRates.residential.map((rate, index) => (
-                      <td key={index} className="px-2 py-1 border bg-blue-50">
-                        <Input
-                          type="number"
-                          className="w-full text-right"
-                          value={rate.hedgeBps || ''}
-                          onChange={(e) => updateResidentialCapRate(index, 'hedgeBps', Number(e.target.value) || 0)}
-                        />
-                      </td>
-                    ))}
-                  </tr>
-                  <tr>
-                    <td className="px-4 py-2 font-semibold">Total Hedge</td>
-                    {capRates.residential.map((rate, index) => (
-                      <td key={index} className="px-4 py-2 text-right">{rate.totalHedge}%</td>
-                    ))}
-                  </tr>
-                  <tr>
-                    <td className="px-4 py-2 font-semibold">Applied Cap Rate</td>
-                    {capRates.residential.map((rate, index) => (
-                      <td key={index} className="px-4 py-2 text-right">{rate.appliedCapRate}%</td>
-                    ))}
-                  </tr>
-                </tbody>
-              </table>
+      <div className="space-y-6">
+        <table className="w-full">
+          <thead>
+            <tr>
+              <th className="text-left">Month</th>
+              <th className="text-left">Year</th>
+              <th className="text-right">Base Rate</th>
+              <th className="text-right">Hedge %</th>
+              <th className="text-right">Hedge bps</th>
+              <th className="text-right">Total Hedge</th>
+              <th className="text-right">Applied Cap Rate</th>
+            </tr>
+          </thead>
+          <tbody>
+            {capRates?.residential?.map((rate, index) => (
+              <tr key={rate.year}>
+                <td>{rate.month}</td>
+                <td>{rate.year}</td>
+                <td>
+                  <Input
+                    type="number"
+                    value={rate.baseRate}
+                    onChange={(e: ChangeEvent<HTMLInputElement>) => updateResidentialCapRate(index, 'baseRate', e.target.value)}
+                    className="bg-blue-50"
+                    step={0.01}
+                  />
+                </td>
+                <td className="text-right">{rate.hedgePercent}%</td>
+                <td>
+                  <Input
+                    type="number"
+                    value={rate.hedgeBps}
+                    onChange={(e: ChangeEvent<HTMLInputElement>) => updateResidentialCapRate(index, 'hedgeBps', e.target.value)}
+                    className="bg-blue-50"
+                    step={1}
+                  />
+                </td>
+                <td className="text-right">{rate.totalHedge}</td>
+                <td className="text-right">{rate.appliedCapRate.toFixed(2)}%</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+
+        <div className="space-y-4">
+          <h3 className="font-semibold">Cap Rate Adjustment for Ground Lease</h3>
+          <div className="flex space-x-4">
+            <div className="flex items-center gap-2">
+              <label>
+                bps
+                <Input
+                  type="number"
+                  value={capRateAdjustmentGroundLease?.bps || 0}
+                  onChange={(e: ChangeEvent<HTMLInputElement>) => setCapRateAdjustmentGroundLease({ 
+                    ...capRateAdjustmentGroundLease, 
+                    bps: Number(e.target.value) 
+                  })}
+                  className="bg-blue-50"
+                  step={1}
+                />
+              </label>
+            </div>
+            <div className="flex items-center gap-2">
+              <label>
+                %
+                <Input
+                  type="number"
+                  value={capRateAdjustmentGroundLease?.percent || 0}
+                  onChange={(e: ChangeEvent<HTMLInputElement>) => setCapRateAdjustmentGroundLease({ 
+                    ...capRateAdjustmentGroundLease, 
+                    percent: Number(e.target.value) 
+                  })}
+                  className="bg-blue-50"
+                  step={0.01}
+                />
+              </label>
             </div>
           </div>
+        </div>
 
-          {/* Cap Rate Adjustment for Ground Lease */}
-          <div className="mb-6">
-            <div className="overflow-x-auto">
-              <table className="w-full border-collapse">
-                <tbody>
-                  <tr>
-                    <td className="px-4 py-2">Cap Rate Adjustment for Ground Lease:</td>
-                    <td className="px-2 py-1 border bg-blue-50">
-                      <Input
-                        type="number"
-                        className="w-full text-right"
-                        value={capRateAdjustmentGroundLease.bps || ''}
-                        onChange={(e) => setCapRateAdjustmentGroundLease({
-                          ...capRateAdjustmentGroundLease,
-                          bps: Number(e.target.value) || 0
-                        })}
-                      />
-                    </td>
-                    <td className="px-2 py-1 border bg-blue-50">
-                      <Input
-                        type="number"
-                        step="0.01"
-                        className="w-full text-right"
-                        value={capRateAdjustmentGroundLease.percent || ''}
-                        onChange={(e) => setCapRateAdjustmentGroundLease({
-                          ...capRateAdjustmentGroundLease,
-                          percent: Number(e.target.value) || 0
-                        })}
-                      />
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
+        <div className="space-y-4">
+          <h3 className="font-semibold">Commercial</h3>
+          <div className="flex space-x-4">
+            <div className="flex items-center gap-2">
+              <label>
+                Spot Cap Rate as of
+                <Input
+                  type="date"
+                  value={capRates?.commercial?.spotCapRateDate || ''}
+                  onChange={(e: ChangeEvent<HTMLInputElement>) => updateCommercialCapRate('spotCapRateDate', e.target.value)}
+                  className="bg-blue-50"
+                />
+              </label>
             </div>
-          </div>
-
-          {/* Commercial */}
-          <div>
-            <h4 className="font-semibold mb-2">Commercial</h4>
-            <div className="overflow-x-auto">
-              <table className="w-full border-collapse">
-                <tbody>
-                  <tr>
-                    <td className="px-4 py-2">Spot Cap Rate as of:</td>
-                    <td className="px-2 py-1 border bg-blue-50">
-                      <Input
-                        type="text"
-                        className="w-full"
-                        value={capRates.commercial.spotCapRateDate}
-                        onChange={(e) => updateCommercialCapRate('spotCapRateDate', e.target.value)}
-                      />
-                    </td>
-                  </tr>
-                  <tr>
-                    <td className="px-4 py-2">Spot Cap Rate</td>
-                    <td className="px-2 py-1 border bg-blue-50">
-                      <Input
-                        type="number"
-                        step="0.01"
-                        className="w-full text-right"
-                        value={capRates.commercial.spotCapRate || ''}
-                        onChange={(e) => updateCommercialCapRate('spotCapRate', Number(e.target.value) || 0)}
-                      />
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
+            <div className="flex items-center gap-2">
+              <label>
+                Spot Cap Rate
+                <Input
+                  type="number"
+                  value={capRates?.commercial?.spotCapRate || 0}
+                  onChange={(e: ChangeEvent<HTMLInputElement>) => updateCommercialCapRate('spotCapRate', Number(e.target.value))}
+                  className="bg-blue-50"
+                  step={0.01}
+                />
+              </label>
             </div>
           </div>
         </div>
       </div>
     </Card>
-  )
-} 
+  );
+}; 

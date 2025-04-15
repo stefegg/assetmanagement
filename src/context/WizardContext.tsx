@@ -270,6 +270,51 @@ export interface WizardContextType {
     percent: number
   }
 
+  // Valuation Assessment
+  valuationAssessment: {
+    adjustResidentialValue: boolean;
+    buyersAssessedPercent: number;
+    treatmentOfTaxAbatement: string;
+    residentialNOI: {
+      totalRevenue: string;
+      marketRent: string;
+      vacancy: string;
+      concessions: string;
+      badDebt: string;
+      expenses: string;
+      taxes: string;
+      normalizeVacancy: number;
+      normalizeConcessions: number;
+      normalizeBadDebt: number;
+    };
+    commercialNOI: {
+      noi: string;
+    };
+    sellingCosts: {
+      transferTaxTotal: number;
+      transferTaxPaidBySeller: number;
+      titleAndEscrow: number;
+    };
+    brokerCommission: {
+      tier1: {
+        cap: number;
+        percentOfValue: number;
+        devPhase: number;
+        invPhase: number;
+      };
+      tier2: {
+        cap: number;
+        percentOfValue: number;
+        devPhase: number;
+        invPhase: number;
+      };
+    };
+    dispositionFees: {
+      greystar: number;
+      other: number;
+    };
+  }
+
   // Setters
   setPropertyName: (value: string) => void;
   setAddress: (value: string) => void;
@@ -472,6 +517,51 @@ export interface WizardContextType {
   setCapRateAdjustmentGroundLease: (adjustment: {
     bps: number
     percent: number
+  }) => void
+
+  // Valuation Assessment
+  setValuationAssessment: (valuationAssessment: {
+    adjustResidentialValue: boolean;
+    buyersAssessedPercent: number;
+    treatmentOfTaxAbatement: string;
+    residentialNOI: {
+      totalRevenue: string;
+      marketRent: string;
+      vacancy: string;
+      concessions: string;
+      badDebt: string;
+      expenses: string;
+      taxes: string;
+      normalizeVacancy: number;
+      normalizeConcessions: number;
+      normalizeBadDebt: number;
+    };
+    commercialNOI: {
+      noi: string;
+    };
+    sellingCosts: {
+      transferTaxTotal: number;
+      transferTaxPaidBySeller: number;
+      titleAndEscrow: number;
+    };
+    brokerCommission: {
+      tier1: {
+        cap: number;
+        percentOfValue: number;
+        devPhase: number;
+        invPhase: number;
+      };
+      tier2: {
+        cap: number;
+        percentOfValue: number;
+        devPhase: number;
+        invPhase: number;
+      };
+    };
+    dispositionFees: {
+      greystar: number;
+      other: number;
+    };
   }) => void
 }
 
@@ -694,6 +784,51 @@ export function WizardProvider({ children }: { children: ReactNode }) {
   }>({ residential: [], commercial: { spotCapRateDate: '', spotCapRate: 0 } });
   const [capRateAdjustmentGroundLease, setCapRateAdjustmentGroundLease] = useState<{ bps: number; percent: number }>({ bps: 0, percent: 0 });
 
+  // Valuation Assessment
+  const [valuationAssessment, setValuationAssessment] = useState({
+    adjustResidentialValue: false,
+    buyersAssessedPercent: 85,
+    treatmentOfTaxAbatement: 'Not Capitalized',
+    residentialNOI: {
+      totalRevenue: 'F12',
+      marketRent: 'F12',
+      vacancy: 'F12',
+      concessions: 'F12',
+      badDebt: 'F12',
+      expenses: 'F12',
+      taxes: 'F12',
+      normalizeVacancy: 0,
+      normalizeConcessions: 0,
+      normalizeBadDebt: 0
+    },
+    commercialNOI: {
+      noi: 'F12'
+    },
+    sellingCosts: {
+      transferTaxTotal: 0.2,
+      transferTaxPaidBySeller: 0.2,
+      titleAndEscrow: 0
+    },
+    brokerCommission: {
+      tier1: {
+        cap: 45000000,
+        percentOfValue: 0.5,
+        devPhase: 45000000,
+        invPhase: 45000000
+      },
+      tier2: {
+        cap: 200000000,
+        percentOfValue: 0.3,
+        devPhase: 57509290,
+        invPhase: 60312315
+      }
+    },
+    dispositionFees: {
+      greystar: 0,
+      other: 0
+    }
+  });
+
   return (
     <WizardContext.Provider
       value={{
@@ -859,6 +994,7 @@ export function WizardProvider({ children }: { children: ReactNode }) {
         commercialTenants,
         capRates,
         capRateAdjustmentGroundLease,
+        valuationAssessment,
         setPropertyName,
         setAddress,
         setCity,
@@ -1015,6 +1151,7 @@ export function WizardProvider({ children }: { children: ReactNode }) {
         setCapRates,
         setCapRateAdjustmentGroundLease,
         setCommercialTenants,
+        setValuationAssessment
       }}
     >
       {children}
