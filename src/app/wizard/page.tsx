@@ -6,6 +6,11 @@ import { ProjectSchedule } from '@/components/ProjectSchedule'
 import { PartnershipStructure } from '@/components/PartnershipStructure'
 import { Debt } from '@/components/Debt'
 import { IncomeAndExpenses } from '@/components/IncomeAndExpenses'
+import { Taxes } from '@/components/Taxes'
+import { Insurance } from '@/components/Insurance'
+import { GroundLease } from '@/components/GroundLease'
+import { CommercialAssumptions } from '@/components/CommercialAssumptions'
+import { CapRate } from '@/components/CapRate'
 
 export default function WizardPage() {
   return (
@@ -17,6 +22,11 @@ export default function WizardPage() {
         <PartnershipStructure />
         <Debt />
         <IncomeAndExpenses />
+        <Taxes />
+        <Insurance />
+        <GroundLease />
+        <CommercialAssumptions />
+        <CapRate />
       </main>
     </WizardProvider>
   )

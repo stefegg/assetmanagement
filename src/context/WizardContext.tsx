@@ -61,7 +61,7 @@ export interface Loan {
   loanDebtServiceCoverageThrough: string;
 }
 
-interface WizardContextType {
+export interface WizardContextType {
   propertyName: string;
   address: string;
   city: string;
@@ -181,6 +181,96 @@ interface WizardContextType {
   otherExpensesGrowth: number[];
   partnershipOwnerGrowth: number[];
   debtServiceGroundLeaseGrowth: number[];
+  
+  // Tax Properties
+  propertyTaxesInArrears: boolean;
+  propertyTaxesPaymentMonths: string[];
+  otherTaxesInArrears: boolean;
+  otherTaxesPaymentMonths: string[];
+  assessedPercentage: number[];
+  cumulativeProjectCosts: number[];
+  taxableValue: number[];
+  assessmentOverride: number[];
+  taxRateGrowth: number[];
+  taxRate: number[];
+  taxBillGrowth: number[];
+  taxBillOverride: number[];
+  taxes: number[];
+  taxesGrowthRate: number[];
+  monthlyAccrual: number[];
+  propertyTaxPaymentsOverride: { [key: string]: { [month: number]: number } };
+  otherTaxPaymentsOverride: { [key: string]: { [month: number]: number } };
+  egi: number[];
+  taxRateEGI: number[];
+  otherTaxes: number[];
+
+  // Insurance - Property
+  totalInsurableValue: number;
+  propertyInsuranceCostPer100: number;
+  boilerMachineryCostPer100: number;
+  propertyInsuranceGrowthRate: number[];
+  propertyInsuranceAnnualPayment: number[];
+  insurancePerUnit: number[];
+  
+  // Insurance - Casualty
+  generalLiabilityExcessUmbrella: number;
+  pollution: number;
+  propertyRelatedPercentage: number;
+  casualtyInsuranceGrowthRate: number[];
+  casualtyInsuranceAnnualPayment: number[];
+
+  // Insurance Monthly Details
+  insuranceMonthlyDetails1: { [year: number]: { [month: number]: number } };
+  insuranceMonthlyDetails2: { [year: number]: { [month: number]: number } };
+  
+  // Ground Lease
+  groundLeasePaymentMonths: string[];
+  groundLeaseGrowthRate: number[];
+  groundLeaseAnnualPayment: number[];
+  groundLeaseMonthlyAccrual: number[];
+  groundLeaseMonthlyDetails1: { [year: number]: { [month: number]: number } };
+  groundLeaseMonthlyDetails2: { [year: number]: { [month: number]: number } };
+  stepUpMonth: string;
+  
+  // Commercial Assumptions
+  generalVacancy: number
+  commercialTenants: Array<{
+    name: string
+    nrsf: number
+    nnnRate: number
+    annualLeaseEsc: number
+    leaseStart: string
+    freeRentMonths: number
+    camRate: number
+    annualCamEsc: number
+    tiPerSf: number
+    tiConstructionTime: number
+    lcPercentage: number
+    lcTerm: number
+  }>
+
+  // Valuation Assumptions
+  capRates: {
+    residential: {
+      month: number
+      year: number
+      baseRate: number
+      hedgePercent: number
+      hedgeBps: number
+      totalHedge: number
+      appliedCapRate: number
+    }[]
+    commercial: {
+      spotCapRateDate: string
+      spotCapRate: number
+    }
+  }
+  capRateAdjustmentGroundLease: {
+    bps: number
+    percent: number
+  }
+
+  // Setters
   setPropertyName: (value: string) => void;
   setAddress: (value: string) => void;
   setCity: (value: string) => void;
@@ -299,6 +389,90 @@ interface WizardContextType {
   setOtherExpensesGrowth: (value: number[]) => void;
   setPartnershipOwnerGrowth: (value: number[]) => void;
   setDebtServiceGroundLeaseGrowth: (value: number[]) => void;
+  
+  // Tax Setters
+  setPropertyTaxesInArrears: (value: boolean) => void;
+  setPropertyTaxesPaymentMonths: (value: string[]) => void;
+  setOtherTaxesInArrears: (value: boolean) => void;
+  setOtherTaxesPaymentMonths: (value: string[]) => void;
+  setAssessedPercentage: (value: number[]) => void;
+  setAssessmentOverride: (value: number[]) => void;
+  setTaxRateGrowth: (value: number[]) => void;
+  setTaxBillGrowth: (value: number[]) => void;
+  setTaxBillOverride: (value: number[]) => void;
+
+  // Additional Tax Setters
+  setPropertyTaxPaymentsOverride: (value: { [key: string]: { [month: number]: number } }) => void;
+  setOtherTaxPaymentsOverride: (value: { [key: string]: { [month: number]: number } }) => void;
+  setEgi: (value: number[]) => void;
+  setTaxRateEGI: (value: number[]) => void;
+  setOtherTaxes: (value: number[]) => void;
+
+  // Insurance - Property
+  setTotalInsurableValue: (value: number) => void;
+  setPropertyInsuranceCostPer100: (value: number) => void;
+  setBoilerMachineryCostPer100: (value: number) => void;
+  setPropertyInsuranceGrowthRate: (values: number[]) => void;
+  setPropertyInsuranceAnnualPayment: (values: number[]) => void;
+  setInsurancePerUnit: (values: number[]) => void;
+  
+  // Insurance - Casualty
+  setGeneralLiabilityExcessUmbrella: (value: number) => void;
+  setPollution: (value: number) => void;
+  setPropertyRelatedPercentage: (value: number) => void;
+  setCasualtyInsuranceGrowthRate: (values: number[]) => void;
+  setCasualtyInsuranceAnnualPayment: (values: number[]) => void;
+
+  // Insurance Monthly Details setters
+  setInsuranceMonthlyDetails1: (details: { [year: number]: { [month: number]: number } }) => void;
+  setInsuranceMonthlyDetails2: (details: { [year: number]: { [month: number]: number } }) => void;
+
+  // Ground Lease setters
+  setGroundLeasePaymentMonths: (value: string[]) => void;
+  setGroundLeaseGrowthRate: (values: number[]) => void;
+  setGroundLeaseAnnualPayment: (values: number[]) => void;
+  setGroundLeaseMonthlyAccrual: (values: number[]) => void;
+  setGroundLeaseMonthlyDetails1: (details: { [year: number]: { [month: number]: number } }) => void;
+  setGroundLeaseMonthlyDetails2: (details: { [year: number]: { [month: number]: number } }) => void;
+  setStepUpMonth: (month: string) => void;
+
+  // Commercial Assumptions
+  setGeneralVacancy: (value: number) => void
+  setCommercialTenants: (tenants: Array<{
+    name: string
+    nrsf: number
+    nnnRate: number
+    annualLeaseEsc: number
+    leaseStart: string
+    freeRentMonths: number
+    camRate: number
+    annualCamEsc: number
+    tiPerSf: number
+    tiConstructionTime: number
+    lcPercentage: number
+    lcTerm: number
+  }>) => void
+
+  // Valuation Assumptions
+  setCapRates: (rates: {
+    residential: {
+      month: number
+      year: number
+      baseRate: number
+      hedgePercent: number
+      hedgeBps: number
+      totalHedge: number
+      appliedCapRate: number
+    }[]
+    commercial: {
+      spotCapRateDate: string
+      spotCapRate: number
+    }
+  }) => void
+  setCapRateAdjustmentGroundLease: (adjustment: {
+    bps: number
+    percent: number
+  }) => void
 }
 
 const WizardContext = createContext<WizardContextType | undefined>(undefined);
@@ -433,6 +607,93 @@ export function WizardProvider({ children }: { children: ReactNode }) {
 
   const [loans, setLoans] = useState<Loan[]>([]);
 
+  // Tax States
+  const [propertyTaxesInArrears, setPropertyTaxesInArrears] = useState(false);
+  const [propertyTaxesPaymentMonths, setPropertyTaxesPaymentMonths] = useState<string[]>(['Apr', 'None', 'None', 'None']);
+  const [otherTaxesInArrears, setOtherTaxesInArrears] = useState(false);
+  const [otherTaxesPaymentMonths, setOtherTaxesPaymentMonths] = useState<string[]>(['Apr', 'None', 'None', 'None']);
+  const [assessedPercentage, setAssessedPercentage] = useState<number[]>(Array(16).fill(85));
+  const [cumulativeProjectCosts] = useState<number[]>(Array(16).fill(0));
+  const [taxableValue] = useState<number[]>(Array(16).fill(0));
+  const [assessmentOverride, setAssessmentOverride] = useState<number[]>(Array(16).fill(0));
+  const [taxRateGrowth, setTaxRateGrowth] = useState<number[]>(Array(16).fill(0));
+  const [taxRate] = useState<number[]>(Array(16).fill(0));
+  const [taxBillGrowth, setTaxBillGrowth] = useState<number[]>(Array(16).fill(0));
+  const [taxBillOverride, setTaxBillOverride] = useState<number[]>(Array(16).fill(0));
+  const [taxes] = useState<number[]>(Array(16).fill(0));
+  const [taxesGrowthRate] = useState<number[]>(Array(16).fill(0));
+  const [monthlyAccrual] = useState<number[]>(Array(16).fill(0));
+
+  // Additional Tax States
+  const [propertyTaxPaymentsOverride, setPropertyTaxPaymentsOverride] = useState<{ [key: string]: { [month: number]: number } }>({});
+  const [otherTaxPaymentsOverride, setOtherTaxPaymentsOverride] = useState<{ [key: string]: { [month: number]: number } }>({});
+  const [egi, setEgi] = useState<number[]>(Array(16).fill(0));
+  const [taxRateEGI, setTaxRateEGI] = useState<number[]>(Array(16).fill(0));
+  const [otherTaxes, setOtherTaxes] = useState<number[]>(Array(16).fill(0));
+
+  // Insurance - Property
+  const [totalInsurableValue, setTotalInsurableValue] = useState<number>(0);
+  const [propertyInsuranceCostPer100, setPropertyInsuranceCostPer100] = useState<number>(0);
+  const [boilerMachineryCostPer100, setBoilerMachineryCostPer100] = useState<number>(0);
+  const [propertyInsuranceGrowthRate, setPropertyInsuranceGrowthRate] = useState<number[]>(Array(16).fill(0));
+  const [propertyInsuranceAnnualPayment, setPropertyInsuranceAnnualPayment] = useState<number[]>(Array(16).fill(0));
+  const [insurancePerUnit, setInsurancePerUnit] = useState<number[]>(Array(16).fill(0));
+  
+  // Insurance - Casualty
+  const [generalLiabilityExcessUmbrella, setGeneralLiabilityExcessUmbrella] = useState<number>(0);
+  const [pollution, setPollution] = useState<number>(0);
+  const [propertyRelatedPercentage, setPropertyRelatedPercentage] = useState<number>(0);
+  const [casualtyInsuranceGrowthRate, setCasualtyInsuranceGrowthRate] = useState<number[]>(Array(16).fill(0));
+  const [casualtyInsuranceAnnualPayment, setCasualtyInsuranceAnnualPayment] = useState<number[]>(Array(16).fill(0));
+
+  // Insurance Monthly Details
+  const [insuranceMonthlyDetails1, setInsuranceMonthlyDetails1] = useState<{ [year: number]: { [month: number]: number } }>({});
+  const [insuranceMonthlyDetails2, setInsuranceMonthlyDetails2] = useState<{ [year: number]: { [month: number]: number } }>({});
+
+  // Ground Lease
+  const [groundLeasePaymentMonths, setGroundLeasePaymentMonths] = useState<string[]>(['Jan', 'Apr', 'Jul', 'Oct']);
+  const [groundLeaseGrowthRate, setGroundLeaseGrowthRate] = useState<number[]>(Array(16).fill(0));
+  const [groundLeaseAnnualPayment, setGroundLeaseAnnualPayment] = useState<number[]>(Array(16).fill(0));
+  const [groundLeaseMonthlyAccrual, setGroundLeaseMonthlyAccrual] = useState<number[]>(Array(16).fill(0));
+  const [groundLeaseMonthlyDetails1, setGroundLeaseMonthlyDetails1] = useState<{ [year: number]: { [month: number]: number } }>({});
+  const [groundLeaseMonthlyDetails2, setGroundLeaseMonthlyDetails2] = useState<{ [year: number]: { [month: number]: number } }>({});
+  const [stepUpMonth, setStepUpMonth] = useState<string>('Mar');
+
+  // Commercial Assumptions
+  const [generalVacancy, setGeneralVacancy] = useState(0);
+  const [commercialTenants, setCommercialTenants] = useState<Array<{
+    name: string
+    nrsf: number
+    nnnRate: number
+    annualLeaseEsc: number
+    leaseStart: string
+    freeRentMonths: number
+    camRate: number
+    annualCamEsc: number
+    tiPerSf: number
+    tiConstructionTime: number
+    lcPercentage: number
+    lcTerm: number
+  }>>([]);
+
+  // Valuation Assumptions
+  const [capRates, setCapRates] = useState<{
+    residential: {
+      month: number
+      year: number
+      baseRate: number
+      hedgePercent: number
+      hedgeBps: number
+      totalHedge: number
+      appliedCapRate: number
+    }[]
+    commercial: {
+      spotCapRateDate: string
+      spotCapRate: number
+    }
+  }>({ residential: [], commercial: { spotCapRateDate: '', spotCapRate: 0 } });
+  const [capRateAdjustmentGroundLease, setCapRateAdjustmentGroundLease] = useState<{ bps: number; percent: number }>({ bps: 0, percent: 0 });
+
   return (
     <WizardContext.Provider
       value={{
@@ -554,6 +815,50 @@ export function WizardProvider({ children }: { children: ReactNode }) {
         otherExpensesGrowth,
         partnershipOwnerGrowth,
         debtServiceGroundLeaseGrowth,
+        propertyTaxesInArrears,
+        propertyTaxesPaymentMonths,
+        otherTaxesInArrears,
+        otherTaxesPaymentMonths,
+        assessedPercentage,
+        cumulativeProjectCosts,
+        taxableValue,
+        assessmentOverride,
+        taxRateGrowth,
+        taxRate,
+        taxBillGrowth,
+        taxBillOverride,
+        taxes,
+        taxesGrowthRate,
+        monthlyAccrual,
+        propertyTaxPaymentsOverride,
+        otherTaxPaymentsOverride,
+        egi,
+        taxRateEGI,
+        otherTaxes,
+        totalInsurableValue,
+        propertyInsuranceCostPer100,
+        boilerMachineryCostPer100,
+        propertyInsuranceGrowthRate,
+        propertyInsuranceAnnualPayment,
+        insurancePerUnit,
+        generalLiabilityExcessUmbrella,
+        pollution,
+        propertyRelatedPercentage,
+        casualtyInsuranceGrowthRate,
+        casualtyInsuranceAnnualPayment,
+        insuranceMonthlyDetails1,
+        insuranceMonthlyDetails2,
+        groundLeasePaymentMonths,
+        groundLeaseGrowthRate,
+        groundLeaseAnnualPayment,
+        groundLeaseMonthlyAccrual,
+        groundLeaseMonthlyDetails1,
+        groundLeaseMonthlyDetails2,
+        stepUpMonth,
+        generalVacancy,
+        commercialTenants,
+        capRates,
+        capRateAdjustmentGroundLease,
         setPropertyName,
         setAddress,
         setCity,
@@ -672,6 +977,44 @@ export function WizardProvider({ children }: { children: ReactNode }) {
         setOtherExpensesGrowth,
         setPartnershipOwnerGrowth,
         setDebtServiceGroundLeaseGrowth,
+        setPropertyTaxesInArrears,
+        setPropertyTaxesPaymentMonths,
+        setOtherTaxesInArrears,
+        setOtherTaxesPaymentMonths,
+        setAssessedPercentage,
+        setAssessmentOverride,
+        setTaxRateGrowth,
+        setTaxBillGrowth,
+        setTaxBillOverride,
+        setPropertyTaxPaymentsOverride,
+        setOtherTaxPaymentsOverride,
+        setEgi,
+        setTaxRateEGI,
+        setOtherTaxes,
+        setTotalInsurableValue,
+        setPropertyInsuranceCostPer100,
+        setBoilerMachineryCostPer100,
+        setPropertyInsuranceGrowthRate,
+        setPropertyInsuranceAnnualPayment,
+        setInsurancePerUnit,
+        setGeneralLiabilityExcessUmbrella,
+        setPollution,
+        setPropertyRelatedPercentage,
+        setCasualtyInsuranceGrowthRate,
+        setCasualtyInsuranceAnnualPayment,
+        setInsuranceMonthlyDetails1,
+        setInsuranceMonthlyDetails2,
+        setGroundLeasePaymentMonths,
+        setGroundLeaseGrowthRate,
+        setGroundLeaseAnnualPayment,
+        setGroundLeaseMonthlyAccrual,
+        setGroundLeaseMonthlyDetails1,
+        setGroundLeaseMonthlyDetails2,
+        setStepUpMonth,
+        setGeneralVacancy,
+        setCapRates,
+        setCapRateAdjustmentGroundLease,
+        setCommercialTenants,
       }}
     >
       {children}
